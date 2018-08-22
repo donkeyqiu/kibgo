@@ -1,4 +1,4 @@
-# kibgo
+# Kibgo
 golang restful api branch
 
 ### Development
