@@ -7,6 +7,7 @@ import (
 	."./config"
 	."./service"
 	."./router"
+	."./controller"
 
 	"gopkg.in/mgo.v2"
 	)
@@ -16,6 +17,7 @@ var base = BaseModel{}
 
 // Parse the configuration file 'config.toml', and establish a connection to DB
 func init() {
+	go HandleMessages()
 	config.Read()
 	base.Server = config.Server
 	base.Database = config.Database

@@ -21,6 +21,9 @@ var routes = Routes{
 	// userAccess
 	Route{"Login", "POST", "/login", Login},
 
+	// websocket
+	Route{"Ws", "GET", "/ws", HandleConnections},
+
 	// user
 	Route{"IndexUser", "GET", "/user", IndexUser},
 	Route{"ShowUser", "GET", "/user/{userId}", ShowUser},
