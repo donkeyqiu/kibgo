@@ -19,9 +19,11 @@ var upgrader = websocket.Upgrader{
 
 // Define our message object
 type Message struct {
-	Userid   string `json:"userid"`
+	UserId   string `json:"userId"`
 	Username string `json:"username"`
 	Message  string `json:"message"`
+	SendAt   string `json:"sendAt"`
+	Type     string `json:"type"`
 }
 
 func HandleConnections(w http.ResponseWriter, r *http.Request) {

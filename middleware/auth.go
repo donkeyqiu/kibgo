@@ -24,22 +24,24 @@ func parseToken(tokenString string, key string) (interface{}, bool) {
 	}
 }
 
-func Auth(inner http.Handler, name string) http.Handler {
+func Auth(inner http.Handler, name string, Auth bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if name != "Login" {
+		if Auth {
 			var authString = ""
 			if len(r.Header["Authorization"]) > 0 {
 				authString = r.Header["Authorization"][0]
 				kv := strings.Split(authString, " ")
 				if len(kv) != 2 || kv[0] != "Bearer" {
-					RespondWithError(w, http.StatusBadRequest, "Token错误")
+					RespondWithError(w, http.StatusUnauthorized, "请登录")
+					return
 				}
 				tokenString := kv[1]
 				_, ok := parseToken(tokenString, "Welcome to PurePearl")
 				if ok {
 					inner.ServeHTTP(w, r)
 				} else {
-					RespondWithError(w, http.StatusUnauthorized, "Token错误或过期")
+					RespondWithError(w, http.StatusUnauthorized, "请重新登录")
+					return
 				}
 			} else {
 				RespondWithError(w, http.StatusUnauthorized, "您没有授权")

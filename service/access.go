@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"time"
 
-	"gopkg.in/mgo.v2/bson"
 	"github.com/dgrijalva/jwt-go"
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -29,7 +29,7 @@ func (m *UserModel) Login(username, password string) (Msg, error) {
 	}
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := make(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Hour * time.Duration(8)).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * time.Duration(24*180)).Unix()
 	claims["iat"] = time.Now().Unix()
 	token.Claims = claims
 	tokenString, err := token.SignedString([]byte(SecretKey))

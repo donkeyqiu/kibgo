@@ -41,7 +41,7 @@ func IndexProduct(w http.ResponseWriter, r *http.Request) {
 	products, err := productModel.ProductsFindByParams(query, limit, page)
 	total, err := productModel.ProductsNum()
 	if err != nil {
-		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	RespondWithJson(w, http.StatusOK, Msg{"code": 200, "total": total, "data": products})
@@ -64,15 +64,15 @@ func CreateProducts(w http.ResponseWriter, r *http.Request) {
 	log.Printf("CofoxAPI: %s", r.Body)
 	var product Product
 	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
-		RespondWithError(w, http.StatusBadRequest, "转码失败")
+		RespondWithError(w, http.StatusInternalServerError, "转码失败")
 		return
 	}
 	product.ID = bson.NewObjectId()
 	if err := productModel.ProductInsert(product); err != nil {
-		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
-	RespondWithJson(w, http.StatusCreated, product)
+	RespondWithJson(w, http.StatusOK, product)
 }
 
 // PUT update an existing product
@@ -80,11 +80,11 @@ func UpdateProducts(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var product Product
 	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
-		RespondWithError(w, http.StatusBadRequest, "转码失败")
+		RespondWithError(w, http.StatusInternalServerError, "转码失败")
 		return
 	}
 	if err := productModel.ProductUpdate(product); err != nil {
-		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	RespondWithJson(w, http.StatusOK, Msg{"code": 200, "msg": "更新成功"})
@@ -95,11 +95,11 @@ func DeleteProducts(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	var product Product
 	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
-		RespondWithError(w, http.StatusBadRequest, "转码失败")
+		RespondWithError(w, http.StatusInternalServerError, "转码失败")
 		return
 	}
 	if err := productModel.ProductDelete(product); err != nil {
-		RespondWithError(w, http.StatusInternalServerError, err.Error())
+		RespondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	RespondWithJson(w, http.StatusOK, Msg{"code": 200, "msg": "删除成功"})

@@ -9,13 +9,15 @@ import (
 	)
 
 func NewRouter() *mux.Router {
-	router := mux.NewRouter().StrictSlash(true)
+	r := mux.NewRouter()
+	router := r.StrictSlash(true).PathPrefix("/api/v1/").Subrouter()
 	for _, route := range routes {
 		var handler http.Handler
 		handler = route.HandlerFunc
 		handler = Logger(handler, route.Name)
-		// on/off Auth
-		// handler = Auth(handler, route.Name)
+		// on/off Auth Middleware
+		handler = Auth(handler, route.Name, route.Auth)
+		// handler = ServeHTTP(handler, route.Name)
 
 		router.
 			Methods(route.Method).

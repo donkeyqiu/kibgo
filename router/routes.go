@@ -11,27 +11,28 @@ type Route struct {
 	Method      string
 	Pattern     string
 	HandlerFunc http.HandlerFunc
+	Auth     	bool
 }
 
 type Routes []Route
 
 var routes = Routes{
-	Route{"Index", "GET", "/", Index},
+	Route{"Index", "GET", "/", Index, false},
 
 	// userAccess
-	Route{"Login", "POST", "/login", Login},
+	Route{"Login", "POST", "/login", Login, false},
 
-	// websocket
-	Route{"Ws", "GET", "/ws", HandleConnections},
+	// webSocket
+	Route{"Ws", "GET", "/ws", HandleConnections, true},
 
 	// user
-	Route{"IndexUser", "GET", "/user", IndexUser},
-	Route{"ShowUser", "GET", "/user/{userId}", ShowUser},
-	Route{"CreateUser", "POST", "/user", CreateUser},
-	Route{"UpdateUser", "PUT", "/user/{userId}", UpdateUser},
-	Route{"DeleteUser", "DELETE", "/user/{userId}", DeleteUser},
+	Route{"IndexUser", "GET", "/user", IndexUser, true},
+	Route{"ShowUser", "GET", "/user/{userId}", ShowUser, true},
+	Route{"CreateUser", "POST", "/user", CreateUser, true},
+	Route{"UpdateUser", "PUT", "/user/{userId}", UpdateUser, true},
+	Route{"DeleteUser", "DELETE", "/user/{userId}", DeleteUser, true},
 
 	// product
-	Route{"IndexProduct", "GET", "/product", IndexProduct},
-	Route{"ShowProduct", "GET", "/product/{productId}", ShowProduct},
+	Route{"IndexProduct", "GET", "/product", IndexProduct, false},
+	Route{"ShowProduct", "GET", "/product/{productId}", ShowProduct, true},
 }
